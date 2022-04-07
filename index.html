@@ -25,6 +25,9 @@
         let collisionAudio = new Audio('assets/collision.wav');
         let dogBark = new Audio('assets/bark.wav');
 
+        collisionAudio.addEventListener('canplaythrough', isAppLoaded, false);
+        dogBark.addEventListener('canplaythrough', isAppLoaded, false);
+
         let cat = {
             x: 200,
             y: 220,
