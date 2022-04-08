@@ -44,7 +44,7 @@
             src: 'assets/cat.png'
         };
         let dogs = [];
-        let shots = [];
+        let bones = [];
 
         //Tap/Click-functions
         let clickTimer;
@@ -74,7 +74,7 @@
                 img: new Image()
             };
             bone.img.src = bone.src; // Laser-Bild wird geladen.
-            shots.push(bone);
+            bones.push(bone);
         }
 
         function startGame() {
@@ -106,7 +106,7 @@
                     // clearInterval(checkForShoot);
                 }
 
-                shots.forEach(function (bone) {
+                bones.forEach(function (bone) {
                     // Kontrollieren, ob Laser mit Hund kollidiert
                     if (bone.x + bone.width > dog.x &&
                         bone.y + bone.height > dog.y &&
@@ -144,20 +144,19 @@
         function update() {
             dogs.forEach(function (dog) {
                 if (!dog.hit) {
-                    dog.x -= 5;
+                    dog.x -= 6;
                 }
             });
 
-            shots.forEach(function (bone) {
+            bones.forEach(function (bone) {
                 bone.x += 15;
             });
 
             const jumpCurrent = new Date().getTime();
-            if ((jumpCurrent - jumpStart) > 1500 && jumpActive === true) {
+            if ((jumpCurrent - jumpStart) > 1800 && jumpActive === true) {
                 cat.y += 150;
                 jumpActive = false;
             }
-
         }
 
         function loadImages() {
@@ -175,7 +174,7 @@
             });
 
 
-            shots.forEach(function (bone) {
+            bones.forEach(function (bone) {
                 ctx.drawImage(bone.img, bone.x, bone.y, bone.width, bone.height);
             });
 
