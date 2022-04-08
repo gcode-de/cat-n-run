@@ -43,39 +43,8 @@
             height: 70,
             src: 'assets/cat.png'
         };
-
         let dogs = [];
         let shots = [];
-
-        // document.onkeydown = function (e) {
-        //     if (e.keyCode == 32) { // Leertaste gedrückt
-        //         KEY_SPACE = true;
-        //     }
-
-        //     if (e.keyCode == 38) { // Nach oben gedrückt
-        //         KEY_UP = true;
-        //     }
-
-        //     if (e.keyCode == 40) { // Nach unten gedrückt
-        //         KEY_DOWN = true;
-        //     }
-        // }
-
-
-        // document.onkeyup = function (e) {
-        //     if (e.keyCode == 32) { // Leertaste losgelassen
-        //         KEY_SPACE = false;
-        //     }
-
-
-        //     if (e.keyCode == 38) { // Nach oben losgelassen
-        //         KEY_UP = false;
-        //     }
-
-        //     if (e.keyCode == 40) { // Nach unten losgelassen
-        //         KEY_DOWN = false;
-        //     }
-        // }
 
         //Tap/Click-functions
         let clickTimer;
@@ -96,7 +65,7 @@
         document.ondblclick = function () {
             clearTimeout(clickTimer);
             throwSound.play();
-            let shot = {
+            let bone = {
                 x: cat.x + 110,
                 y: cat.y + 22,
                 width: 60,
@@ -104,19 +73,16 @@
                 src: 'assets/bone.png',
                 img: new Image()
             };
-            shot.img.src = shot.src; // Laser-Bild wird geladen.
-
-            shots.push(shot);
+            bone.img.src = bone.src; // Laser-Bild wird geladen.
+            shots.push(bone);
         }
-
-
 
         function startGame() {
             canvas = document.getElementById('canvas');
             ctx = canvas.getContext('2d');
             loadImages();
             setInterval(update, 1000 / 25);
-            setInterval(createUfos, 5000);
+            setInterval(createDogs, 5000);
             setInterval(checkForCollion, 1000 / 25);
             // setInterval(checkForShoot, 1000 / 10);
             draw();
@@ -135,18 +101,17 @@
                     console.log('Collision!!!');
                     dogs = dogs.filter(u => u != dog);
                     // clearInterval(update); -> funktioniert nicht
-                    // clearInterval(createUfos);
+                    // clearInterval(createDogs);
                     // clearInterval(checkForCollion);
                     // clearInterval(checkForShoot);
                 }
 
-
-                shots.forEach(function (shot) {
+                shots.forEach(function (bone) {
                     // Kontrollieren, ob Laser mit Hund kollidiert
-                    if (shot.x + shot.width > dog.x &&
-                        shot.y + shot.height > dog.y &&
-                        shot.x < dog.x &&
-                        shot.y < dog.y + dog.height
+                    if (bone.x + bone.width > dog.x &&
+                        bone.y + bone.height > dog.y &&
+                        bone.x < dog.x &&
+                        bone.y < dog.y + dog.height
                     ) {
                         dog.hit = true;
                         dogBark.play();
@@ -162,7 +127,7 @@
             });
         }
 
-        function createUfos() {
+        function createDogs() {
             let dog = {
                 x: 720,
                 y: 210,
@@ -175,39 +140,16 @@
             dogs.push(dog);
         }
 
-        // function checkForShoot() {
-        //     if (KEY_SPACE) {
-        //         let shot = {
-        //             x: cat.x + 110,
-        //             y: cat.y + 22,
-        //             width: 20,
-        //             height: 4,
-        //             src: 'assets/shot.png',
-        //             img: new Image()
-        //         };
-        //         shot.img.src = shot.src; // Laser-Bild wird geladen.
-
-        //         shots.push(shot);
-        //     }
-        // }
 
         function update() {
-            if (KEY_UP) {
-                cat.y -= 5;
-            }
-
-            if (KEY_DOWN) {
-                cat.y += 5;
-            }
-
             dogs.forEach(function (dog) {
                 if (!dog.hit) {
                     dog.x -= 5;
                 }
             });
 
-            shots.forEach(function (shot) {
-                shot.x += 15;
+            shots.forEach(function (bone) {
+                bone.x += 15;
             });
 
             const jumpCurrent = new Date().getTime();
@@ -233,19 +175,56 @@
             });
 
 
-            shots.forEach(function (shot) {
-                ctx.drawImage(shot.img, shot.x, shot.y, shot.width, shot.height);
+            shots.forEach(function (bone) {
+                ctx.drawImage(bone.img, bone.x, bone.y, bone.width, bone.height);
             });
 
 
             requestAnimationFrame(draw);
         }
     </script>
+    <style>
+        #overlay {
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            display: grid;
+            place-items: center;
+
+            overflow: hidden;
+        }
+
+        @media screen and (min-width: 500px) {
+            #overlay {
+                display: none;
+            }
+        }
+
+        .overlay-content {
+            /* position: relative;
+            top: 25%;
+            width: 100%;
+            text-align: center;
+            margin-top: 30px;
+            display: inline; */
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+    </style>
 </head>
 
 <body onload="startGame()">
     <canvas id="canvas" width="720" height="300"></canvas>
-
+    <div id="overlay">
+        <div class="overlay-content">
+            <img src="assets/rotate-device.png" alt="Rotate screen" style="width: 100px; height: 100px;" />
+        </div>
+    </div>
 </body>
 <script>
     document.body.addEventListener('touchstart', function () {
