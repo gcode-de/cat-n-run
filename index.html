@@ -25,8 +25,6 @@
         let collisionAudio = new Audio('assets/collision.wav');
         let dogBark = new Audio('assets/bark.wav');
 
-        collisionAudio.addEventListener('canplaythrough', isAppLoaded, false);
-        dogBark.addEventListener('canplaythrough', isAppLoaded, false);
 
         let cat = {
             x: 200,
@@ -68,16 +66,38 @@
                 KEY_DOWN = false;
             }
         }
+        let clickTimer;
 
         document.onclick = function () {
-            if (jumpActive === true) {
-                return
-            }
-            jumpStart = new Date().getTime();
-            jumpActive = true;
-            jumpAudio.play();
-            cat.y -= 150;
+            if (clickTimer) clearTimeout(clickTimer);
+            clickTimer = setTimeout(function () {
+
+                if (jumpActive === true) {
+                    return
+                }
+                jumpStart = new Date().getTime();
+                jumpActive = true;
+                jumpAudio.play();
+                cat.y -= 150;
+            }, 250);
         }
+
+        document.ondblclick = function () {
+            clearTimeout(clickTimer);
+            let shot = {
+                x: cat.x + 110,
+                y: cat.y + 22,
+                width: 60,
+                height: 30,
+                src: 'assets/bone.png',
+                img: new Image()
+            };
+            shot.img.src = shot.src; // Laser-Bild wird geladen.
+
+            shots.push(shot);
+        }
+
+
 
         function startGame() {
             canvas = document.getElementById('canvas');
@@ -86,7 +106,7 @@
             setInterval(update, 1000 / 25);
             setInterval(createUfos, 5000);
             setInterval(checkForCollion, 1000 / 25);
-            setInterval(checkForShoot, 1000 / 10);
+            // setInterval(checkForShoot, 1000 / 10);
             draw();
         }
 
@@ -143,21 +163,21 @@
             dogs.push(dog);
         }
 
-        function checkForShoot() {
-            if (KEY_SPACE) {
-                let shot = {
-                    x: cat.x + 110,
-                    y: cat.y + 22,
-                    width: 20,
-                    height: 4,
-                    src: 'assets/shot.png',
-                    img: new Image()
-                };
-                shot.img.src = shot.src; // Laser-Bild wird geladen.
+        // function checkForShoot() {
+        //     if (KEY_SPACE) {
+        //         let shot = {
+        //             x: cat.x + 110,
+        //             y: cat.y + 22,
+        //             width: 20,
+        //             height: 4,
+        //             src: 'assets/shot.png',
+        //             img: new Image()
+        //         };
+        //         shot.img.src = shot.src; // Laser-Bild wird geladen.
 
-                shots.push(shot);
-            }
-        }
+        //         shots.push(shot);
+        //     }
+        // }
 
         function update() {
             if (KEY_UP) {
