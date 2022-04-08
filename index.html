@@ -21,11 +21,21 @@
         let canvas;
         let ctx;
         let backgroundImage = new Image();
-        let jumpAudio = new Audio('assets/jump.wav');
+
+        //Audio
+        let jumpSound = new Audio('assets/jump.wav');
         let collisionAudio = new Audio('assets/collision.wav');
         let dogBark = new Audio('assets/bark.wav');
+        let throwSound = new Audio('assets/throw.wav');
+        var unlockAudio = []
+        unlockAudio.push(jumpSound)
+        unlockAudio.push(collisionAudio)
+        unlockAudio.push(dogBark)
+        unlockAudio.push(throwSound)
 
 
+
+        //graphics
         let cat = {
             x: 200,
             y: 220,
@@ -37,53 +47,55 @@
         let dogs = [];
         let shots = [];
 
-        document.onkeydown = function (e) {
-            if (e.keyCode == 32) { // Leertaste gedrückt
-                KEY_SPACE = true;
-            }
+        // document.onkeydown = function (e) {
+        //     if (e.keyCode == 32) { // Leertaste gedrückt
+        //         KEY_SPACE = true;
+        //     }
 
-            if (e.keyCode == 38) { // Nach oben gedrückt
-                KEY_UP = true;
-            }
+        //     if (e.keyCode == 38) { // Nach oben gedrückt
+        //         KEY_UP = true;
+        //     }
 
-            if (e.keyCode == 40) { // Nach unten gedrückt
-                KEY_DOWN = true;
-            }
-        }
-
-
-        document.onkeyup = function (e) {
-            if (e.keyCode == 32) { // Leertaste losgelassen
-                KEY_SPACE = false;
-            }
+        //     if (e.keyCode == 40) { // Nach unten gedrückt
+        //         KEY_DOWN = true;
+        //     }
+        // }
 
 
-            if (e.keyCode == 38) { // Nach oben losgelassen
-                KEY_UP = false;
-            }
+        // document.onkeyup = function (e) {
+        //     if (e.keyCode == 32) { // Leertaste losgelassen
+        //         KEY_SPACE = false;
+        //     }
 
-            if (e.keyCode == 40) { // Nach unten losgelassen
-                KEY_DOWN = false;
-            }
-        }
+
+        //     if (e.keyCode == 38) { // Nach oben losgelassen
+        //         KEY_UP = false;
+        //     }
+
+        //     if (e.keyCode == 40) { // Nach unten losgelassen
+        //         KEY_DOWN = false;
+        //     }
+        // }
+
+        //Tap/Click-functions
         let clickTimer;
 
         document.onclick = function () {
             if (clickTimer) clearTimeout(clickTimer);
             clickTimer = setTimeout(function () {
-
                 if (jumpActive === true) {
                     return
                 }
                 jumpStart = new Date().getTime();
                 jumpActive = true;
-                jumpAudio.play();
+                jumpSound.play();
                 cat.y -= 150;
             }, 250);
         }
 
         document.ondblclick = function () {
             clearTimeout(clickTimer);
+            throwSound.play();
             let shot = {
                 x: cat.x + 110,
                 y: cat.y + 22,
@@ -235,5 +247,16 @@
     <canvas id="canvas" width="720" height="300"></canvas>
 
 </body>
+<script>
+    document.body.addEventListener('touchstart', function () {
+        if (unlockAudio) {
+            for (let audio of unlockAudio) {
+                audio.play()
+                audio.pause()
+                audio.currentTime = 0
+            } unlockAudio = null
+        }
+    }, false)
+</script>
 
 </html>
