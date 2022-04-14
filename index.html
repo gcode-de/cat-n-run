@@ -17,7 +17,9 @@
         let KEY_UP = false; // 38
         let KEY_DOWN = false; // 40
         let jumpStart = 0;
-        let jumpActive = false;
+        let jumpUp = false;
+        let jumpDown = false;
+        let jumpApexTime = 1100;
         let canvas;
         let ctx;
         let backgroundImage = new Image();
@@ -52,13 +54,12 @@
         document.onclick = function () {
             if (clickTimer) clearTimeout(clickTimer);
             clickTimer = setTimeout(function () {
-                if (jumpActive === true) {
+                if (jumpUp === true) {
                     return
                 }
                 jumpStart = new Date().getTime();
-                jumpActive = true;
+                jumpUp = true;
                 jumpSound.play();
-                cat.y -= 150;
             }, 250);
         }
 
@@ -87,6 +88,7 @@
             // setInterval(checkForShoot, 1000 / 10);
             draw();
         }
+
 
         function checkForCollion() {
             dogs.forEach(function (dog) {
@@ -149,7 +151,7 @@
             });
 
             bones.forEach(function (bone) {
-                if (jumpActive === true) {
+                if (jumpUp === true) {
                     bone.y += (bone.y - 50) / 5;
                 } else {
                     bone.y += (bone.y - 200) / 5;
@@ -159,9 +161,24 @@
             });
 
             const jumpCurrent = new Date().getTime();
-            if ((jumpCurrent - jumpStart) > 1800 && jumpActive === true) {
-                cat.y += 150;
-                jumpActive = false;
+            if ((jumpCurrent - jumpStart) < (jumpApexTime - 22)) {
+                cat.y -= (cat.y - 0) / 10;
+
+            }
+            if ((jumpCurrent - jumpStart) >= (jumpApexTime - 22) && (jumpCurrent - jumpStart) <= (jumpApexTime + 20)) {
+                jumpUp = false;
+                jumpDown = true;
+                console.log(jumpCurrent - jumpStart, 'switching to jumpDown');
+            }
+
+            if ((jumpCurrent - jumpStart) > (jumpApexTime + 20) && jumpDown === true) {
+                cat.y += (cat.y + 5) / 10;
+            }
+
+            if ((jumpCurrent - jumpStart) > (jumpApexTime * 2) && jumpDown === true) {
+                jumpDown = false;
+                console.log(jumpCurrent - jumpStart, 'switching jumpDown to false');
+                cat.y = 220;
             }
         }
 
@@ -233,7 +250,7 @@
     <br>
     Katzen mögen keine Hunde.<br>
     Tippe/Klicke um über den Hund zu springen. <br>
-    Tippe/Klicke 2x um ihn mit einem Knochen abzulenken!
+    Tippe/Klicke 2x um ihn mit einem Knochen abzulenken! <br>
 </body>
 <script>
     document.body.addEventListener('touchstart', function () {
