@@ -66,8 +66,8 @@
             clearTimeout(clickTimer);
             throwSound.play();
             let bone = {
-                x: cat.x + 110,
-                y: cat.y + 22,
+                x: cat.x + 100,
+                y: cat.y - 10,
                 width: 60,
                 height: 30,
                 src: 'assets/bone.png',
@@ -149,7 +149,13 @@
             });
 
             bones.forEach(function (bone) {
+                if (jumpActive === true) {
+                    bone.y += (bone.y - 50) / 5;
+                } else {
+                    bone.y += (bone.y - 200) / 5;
+                }
                 bone.x += 15;
+
             });
 
             const jumpCurrent = new Date().getTime();
@@ -172,7 +178,6 @@
             dogs.forEach(function (dog) {
                 ctx.drawImage(dog.img, dog.x, dog.y, dog.width, dog.height);
             });
-
 
             bones.forEach(function (bone) {
                 ctx.drawImage(bone.img, bone.x, bone.y, bone.width, bone.height);
@@ -223,7 +228,12 @@
         <div class="overlay-content">
             <img src="assets/rotate-device.png" alt="Rotate screen" style="width: 100px; height: 100px;" />
         </div>
+
     </div>
+    <br>
+    Katzen mögen keine Hunde.<br>
+    Tippe/Klicke um über den Hund zu springen. <br>
+    Tippe/Klicke 2x um ihn mit einem Knochen abzulenken!
 </body>
 <script>
     document.body.addEventListener('touchstart', function () {
