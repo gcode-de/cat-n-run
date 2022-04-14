@@ -39,7 +39,7 @@
 
         //graphics
         let cat = {
-            x: 200,
+            x: 120,
             y: 220,
             width: 100,
             height: 70,
@@ -67,10 +67,10 @@
             clearTimeout(clickTimer);
             throwSound.play();
             let bone = {
-                x: cat.x + 100,
+                x: cat.x + 110,
                 y: cat.y - 10,
-                width: 60,
-                height: 30,
+                width: 40,
+                height: 20,
                 src: 'assets/bone.png',
                 img: new Image()
             };
@@ -100,7 +100,6 @@
                     cat.y < dog.y + dog.height
                 ) {
                     collisionAudio.play();
-                    console.log('Collision!!!');
                     dogs = dogs.filter(u => u != dog);
                     // clearInterval(update); -> funktioniert nicht
                     // clearInterval(createDogs);
@@ -117,7 +116,6 @@
                     ) {
                         dog.hit = true;
                         dogBark.play();
-                        console.log('Collision!!!');
 
                         setTimeout(() => {
                             dogs = dogs.filter(u => u != dog);
@@ -151,13 +149,9 @@
             });
 
             bones.forEach(function (bone) {
-                if (jumpUp === true) {
-                    bone.y += (bone.y - 50) / 5;
-                } else {
-                    bone.y += (bone.y - 200) / 5;
-                }
-                bone.x += 15;
-
+                // bone.y += (bone.y + 2000) / 400;
+                bone.y += 7 + (bone.y / 150);
+                bone.x += 7 + (bone.y / 20);
             });
 
             const jumpCurrent = new Date().getTime();
@@ -168,7 +162,7 @@
             if ((jumpCurrent - jumpStart) >= (jumpApexTime - 22) && (jumpCurrent - jumpStart) <= (jumpApexTime + 20)) {
                 jumpUp = false;
                 jumpDown = true;
-                console.log(jumpCurrent - jumpStart, 'switching to jumpDown');
+                // console.log(jumpCurrent - jumpStart, 'switching to jumpDown');
             }
 
             if ((jumpCurrent - jumpStart) > (jumpApexTime + 20) && jumpDown === true) {
@@ -177,7 +171,7 @@
 
             if ((jumpCurrent - jumpStart) > (jumpApexTime * 2) && jumpDown === true) {
                 jumpDown = false;
-                console.log(jumpCurrent - jumpStart, 'switching jumpDown to false');
+                // console.log(jumpCurrent - jumpStart, 'switching jumpDown to false');
                 cat.y = 220;
             }
         }
