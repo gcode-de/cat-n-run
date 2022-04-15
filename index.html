@@ -150,8 +150,9 @@
 
             bones.forEach(function (bone) {
                 // bone.y += (bone.y + 2000) / 400;
-                bone.y += 7 + (bone.y / 150);
-                bone.x += 7 + (bone.y / 20);
+                bone.y += 0 + ((bone.x - 230) / 20);
+                // bone.x += 7 + (bone.y / 20);
+                bone.x += 12;
             });
 
             const jumpCurrent = new Date().getTime();
